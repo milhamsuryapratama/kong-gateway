@@ -1,0 +1,11 @@
+_format_version: "3.0"
+_transform: true
+
+services:
+  - name: api_service
+    url: http://api-service:8080
+    routes:
+      - name: api
+        paths:
+          - /api
+        strip_path: true
