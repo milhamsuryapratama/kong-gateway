@@ -14,10 +14,8 @@ services:
     image: kong/kong-gateway:3.7.1.2
     container_name: kong-gateway
     environment:
-      - KONG_DATABASE=postgres
-      - KONG_PG_HOST=kong-database
-      - KONG_PG_USER=kong
-      - KONG_PG_PASSWORD=kongpass
+      - KONG_DATABASE=off
+      - KONG_DECLARATIVE_CONFIG=/kong/declarative/kong.yml
       - KONG_PROXY_ACCESS_LOG=/dev/stdout
       - KONG_ADMIN_ACCESS_LOG=/dev/stdout
       - KONG_PROXY_ERROR_LOG=/dev/stderr
@@ -35,33 +33,6 @@ services:
       - 8445:8445
       - 8003:8003
       - 8004:8004
-    networks:
-      - kong-net
-    depends_on:
-      - postgres
-      - golang
-  kong-migration:
-    image: kong/kong-gateway:3.7.1.2
-    command: kong migrations bootstrap
-    profiles: [ "database" ]
-    depends_on:
-      - postgres
-    environment:
-      - KONG_DATABASE=postgres
-      - KONG_PG_HOST=kong-database
-      - KONG_PG_USER=kong
-      - KONG_PG_PASSWORD=kongpass
-    networks:
-      - kong-net
-  postgres:
-    image: postgres:13
-    container_name: kong-database
-    environment:
-      - POSTGRES_USER=kong
-      - POSTGRES_DB=kong
-      - POSTGRES_PASSWORD=kongpass
-    ports:
-      - 5432:5432
     networks:
       - kong-net
 
